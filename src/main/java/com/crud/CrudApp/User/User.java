@@ -1,16 +1,29 @@
 package com.crud.CrudApp.User;
 
+import com.crud.CrudApp.Journal.Journal;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.NonNull;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
+import java.util.ArrayList;
+import java.util.List;
+
+@Document(collection = "users")
 @Data
 public class User {
     @Id
-    private String id;
-    private String name;
+    private ObjectId id;
+
+    @Indexed(unique = true)
+    @NonNull
+    private String userName;
+
+    @NonNull
     private String password;
+    @DBRef
+    private List<Journal> journalEntries = new ArrayList<>();
 }

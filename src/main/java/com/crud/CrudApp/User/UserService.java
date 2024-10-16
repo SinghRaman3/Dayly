@@ -1,32 +1,36 @@
 package com.crud.CrudApp.User;
 
+import com.crud.CrudApp.User.User;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
+import java.util.Optional;
 
-//@Service
+@Service
 public class UserService {
-//    @Autowired
-//    UserRepository userRepository;
-//
-//    public User createUser(User user) {
-//        return userRepository.create(user);
-//    }
-//
-//    public List<User> getAllUsers() {
-//
-//    }
-//
-//    public User getUserById(int id) {
-//        return userRepository.findById(id);
-//    }
-//
-//    public User deleteUser(int id){
-//        User user = userRepository.findById(id);
-//        if(user != null){
-//            userRepository.delete(id);
-//        }
-//    }
-//    public User updateUser(User user) {}
+    @Autowired
+    private UserRepository userRepository;
+
+    public void saveUser(User user) {
+        userRepository.save(user);
+    }
+
+    public List<User> getAll() {
+        return userRepository.findAll();
+    }
+
+    public Optional<User> getById(ObjectId id) {
+        return userRepository.findById(String.valueOf(id));
+    }
+
+    public User getByUsername(String username) {
+        return userRepository.findByUserName(username);
+    }
+
+    public void deleteById(ObjectId id) {
+        userRepository.deleteById(String.valueOf(id));
+    }
+
 }
+
