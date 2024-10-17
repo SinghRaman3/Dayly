@@ -1,5 +1,7 @@
 package com.crud.CrudApp.Journal;
 
+import com.crud.CrudApp.User.User;
+import com.crud.CrudApp.User.UserService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,10 +13,20 @@ import java.util.Optional;
 public class JournalService {
     @Autowired
     private JournalRepository journalRepository;
+    @Autowired
+    private UserService userService;
 
-    public void save(Journal journal) {
-        journal.setDate(LocalDateTime.now());
-        journalRepository.save(journal);
+    public void save(Journal journal, String userName) {
+        try{
+            User user = userService.getByUsername(userName);
+            journal.setDate(LocalDateTime.now());
+            Journal saved = journalRepository.save(journal);
+            user.getJournalEntries().add(saved);
+            userService.saveUser(user);
+        }
+        catch (Exception e){
+            throw new RuntimeException("Error while saving journal./n", e);
+        }
     }
 
     public List<Journal> getAll() {
@@ -25,8 +37,16 @@ public class JournalService {
         return journalRepository.findById(String.valueOf(id));
     }
 
-    public void deleteById(ObjectId id) {
-        journalRepository.deleteById(String.valueOf(id));
+    public void deleteById(ObjectId id, String userName) {
+        try {
+            User user = userService.getByUsername(userName);
+            user.getJournalEntries().removeIf(journal -> journal.getId().equals(id));
+            userService.saveUser(user);
+            journalRepository.deleteById(String.valueOf(id));
+        }
+        catch (Exception e){
+            throw new RuntimeException("Error while deleting journal./n", e);
+        }
     }
 
     public void update(Journal journal) {
