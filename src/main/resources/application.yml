@@ -1,7 +1,10 @@
 spring:
+  main:
+    allow-circular-references: true
   data:
     mongodb:
-      host: localhost
-      port: 27017
+#      host: localhost
+#      port: 27017
+      uri: mongodb+srv://raman:masterjsmaybe@cluster0.s4kisl0.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
       database: journalDB
       auto-index-creation: true
