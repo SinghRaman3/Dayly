@@ -14,7 +14,7 @@ public class UserController {
     private UserService userService;
 
     @DeleteMapping
-    public ResponseEntity<?> deleteUserUser() {
+    public ResponseEntity<?> deleteUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         userService.deleteByUsername(username);
